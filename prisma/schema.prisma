@@ -8,14 +8,24 @@ generator client {
 }
 
 model Customer {
-  id        Int      @id @default(autoincrement())
-  image     String?
-  name      String
-  age       Int
-  cpf       BigInt   @unique
-  phone     BigInt
-  cep       BigInt
-  sex       String
-  createAt  DateTime @default(now())
-  status    String
+  id       Int      @id @default(autoincrement())
+  image    String?
+  name     String
+  age      Int
+  cpf      BigInt   @unique
+  phone    BigInt
+  cep      BigInt
+  sex      String
+  createAt DateTime @default(now())
+  status   String
+}
+
+model Users {
+  id       Int    @id @default(autoincrement())
+  name     String
+  image    String?
+  role     String
+  company  Int
+  username String
+  password String
 }
