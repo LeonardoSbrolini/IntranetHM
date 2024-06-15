@@ -20,6 +20,6 @@ export async function GET(req: any, res: any) {
     return NextResponse.json(serializedCustomers);
   } catch (error) {
     console.error('Error retrieving customers:', error);
-    return NextResponse.json({message: 'Error'});
+    return NextResponse.json({message: 'Error kkk'});
   }
 }
