@@ -227,7 +227,7 @@ export default function DataTableDemo(): React.ReactElement {
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <HoverCard>
+                                <HoverCard key={row.id}>
                                     <HoverCardTrigger asChild>
                                         <TableRow
                                             key={row.id}
