@@ -12,7 +12,7 @@ const handler = NextAuth({
 			},
 			async authorize(credentials, req) {
 				 console.log('credentials:', credentials)
-				const response = await fetch(`http://localhost:3000/api/users`, {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
 					method: 'POST',
 					headers: {
 						'Content-type': 'application/json'
@@ -22,6 +22,7 @@ const handler = NextAuth({
 						password: credentials?.password
 					})
 				})
+				console.log('tentou enviar o fetch')
 				const user: any = await response.json()
 				if (user == '' || !user) {
 					return null
