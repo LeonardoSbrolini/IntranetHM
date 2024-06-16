@@ -11,7 +11,6 @@ const handler = NextAuth({
 				password: { label: "Password", type: "password" }
 			},
 			async authorize(credentials, req) {
-				 console.log('credentials:', credentials)
 				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
 					method: 'POST',
 					headers: {
@@ -21,16 +20,15 @@ const handler = NextAuth({
 						username: credentials?.username,
 						password: credentials?.password
 					})
-				})
-				console.log('tentou enviar o fetch')
-				const user: any = await response.json()
-				if (user == '' || !user) {
-					return null
+				});
+
+				const user: User = await response.json();
+
+				if (!user || !response.ok) {
+					return null;
 				}
-				if (response.ok) {
-					return user;
-				}
-				return null
+
+				return user;
 			}
 		})
 	],
@@ -41,23 +39,18 @@ const handler = NextAuth({
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				const u = user as User
-				token.id = u.id;
-				token.name = u.name;
-				token.role = u.role;
-				token.company = u.company;
+				token.user = user as User
 			}
 			return token;
 		},
 		async session({ session, token }) {
 			if (token?.user) {
-				session.user = token.user as any;
+				session.user = token.user as User
 			}
 			return session;
 		},
 	},
-	secret: process.env.NEXTAUTH_SECRET
-}
-)
+	secret: process.env.NEXTAUTH_SECRET,
+});
 
 export { handler as GET, handler as POST };

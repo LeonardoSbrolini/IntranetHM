@@ -20,7 +20,6 @@ export default function LoginPage() {
             password,
             redirect: false,
         });
-        console.log(`erro`)
         if (result?.error) {
             console.log('Login ou senha inválidos.')
             return;

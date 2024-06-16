@@ -38,7 +38,9 @@ export async function POST(req: any, res: any,) {
                     password: req.body.password
                 }
             });
+            console.log('achou o usuário')
             if (user) {
+                console.log('usuario:', user)
                 return NextResponse.json(user);
             } else {
                return NextResponse.json({ message: 'Usuário não encontrado' })
