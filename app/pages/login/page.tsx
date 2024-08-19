@@ -1,10 +1,12 @@
 "use client"
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { FormEvent, useRef, useState } from "react";
 
 export default function LoginPage() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const router = useRouter()
 
     async function handleLogin(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -25,7 +27,7 @@ export default function LoginPage() {
             return;
         }
 
-        console.log('autenticado')
+        router.push('/')
     }
 
     return (

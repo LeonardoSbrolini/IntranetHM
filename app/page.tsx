@@ -4,11 +4,6 @@ import { useSession } from "next-auth/react"
 export default function Home() {
   const { data: session, status } = useSession()
 
-
-  if (status === "loading") {
-    return <div>Loading...</div>
-  }
-
   return (
     <>
       <div className="p-5 fles flex-col">
@@ -21,9 +16,9 @@ export default function Home() {
       </div>
 
       <div>NEXTAUTH_URL: {process.env.NEXTAUTH_URL}</div>
-      <div>NEXTAUTH_SECRET: {process.env.NEXTAUTH_SECRET}</div>
-      <div>DATABASE_URL: {process.env.DATABASE_URL}</div>
-      <div>NEXT_PUBLIC_API_URL: {process.env.NEXT_PUBLIC_API_URL}</div>
+
+
+      
     </>
   )
 }
