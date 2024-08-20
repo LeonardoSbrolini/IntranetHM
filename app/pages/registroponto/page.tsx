@@ -32,14 +32,17 @@ export default function RegristroPontoPage() {
                     <div className="flex h-full basis-full md:basis-[50%]">
                         <div className="flex flex-col justify-center item h-full p-6 basis-full">
                             <div className="text-xl md:text-2xl text-center pb-4 font-bold">
-                                Regras para preenchimento
+                                Regras para utilização
                             </div>
                             <ul className="list-disc pl-5 mb-4">
-                                <li>Preencha todos os campos obrigatórios.</li>
-                                <li>Verifique se todas as informações estão corretas antes de enviar.</li>
-                                <li>Não use caracteres especiais nos campos de texto.</li>
-                                <li>O formulário deve ser enviado apenas uma vez para evitar duplicidade.</li>
-                                <li>Se você não concordar com os termos, não envie o formulário.</li>
+                                <li>Só é permitido realizar TH / RH / TP / TF / RTS com a autorização de sua liderança.</li>
+                                <li>Toda TH / RH / TP / TF / RTS deve ser enviada via intranet para liderança na data do evento citada. </li>
+                                <li>Só é permitido o envio do registro de ponto até no máximo 2 dias úteis consecutivos a partir da data do evento.</li>
+                                <li>É permitido realizar até 10 Trocas de horário (TH) por mês, caso exceda o limite deverá comunicar a liderança para formalizar a troca de horário.</li>
+                                <li>Não é permitido fazer banco de horas sem a autorização prévia de sua liderança.</li>
+                                <li>Não é permitido realizar Retirada de horas (RH) sem saldo em seu banco de horas.</li>
+                                <li>Após o envio do formulário informar sua liderança sobre o envio do mesmo.</li>
+                                <li>Os registros são enviados ao cartão de ponto no 25º dia do mês (Sujeito a alteração).</li>
                             </ul>
                         </div>
                     </div>
@@ -66,9 +69,9 @@ export default function RegristroPontoPage() {
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[20rem] p-0">
                                         <Command>
-                                            <CommandInput placeholder="Selecione o Setor" />
+                                            <CommandInput placeholder="Selecione o tipo de registro" />
                                             <CommandList>
-                                                <CommandEmpty>Setor não encontrado</CommandEmpty>
+                                                <CommandEmpty>Registro não encontrado</CommandEmpty>
                                                 <CommandGroup>
                                                     {RegistroPontoData.map((tipo) => (
                                                         <CommandItem
@@ -96,13 +99,14 @@ export default function RegristroPontoPage() {
                                 </Popover>
                             </div>
                             <div className="flex">
-                                <div className="basis-[70%] border-2 border-dashed flex flex-col justify-center h-[20rem]">
+                                <div className="basis-[70%] flex flex-col justify-center h-[20rem]">
                                     {(value === "1") && (
                                         <div className="flex justify-between">
                                             <div className="grid w-full max-w-sm items-center justify-items-center gap-1.5">
                                                 <Label htmlFor="inicio">Horário Inicial</Label>
                                                 <Input id="inicio" type="time" className="w-[6rem] cursor-pointer" />
                                             </div>
+                                            <div className="grid w-full max-w-sm items-center justify-items-center gap-1.5">Às</div>
                                             <div className="grid w-full max-w-sm items-center justify-items-center gap-1.5">
                                                 <Label htmlFor="final">Horário Final</Label>
                                                 <Input id="final" type="time" className="w-[6rem] cursor-pointer" />
@@ -141,7 +145,6 @@ export default function RegristroPontoPage() {
                                             </div>
                                         </div>
                                     )}
-
                                     {(value === "3" || value === "4") && (
                                         <div className="flex justify-between">
                                             <div className="grid w-full items-center justify-items-center gap-1.5">
@@ -170,7 +173,6 @@ export default function RegristroPontoPage() {
                                             </div>
                                         </div>
                                     )}
-
                                     {(value === "5") && (
                                         <div className="flex flex-col justify-between gap-2">
                                             <div className="flex">
@@ -189,9 +191,8 @@ export default function RegristroPontoPage() {
                                             </div>
                                         </div>
                                     )}
-
                                 </div>
-                                <div className="basis-[30%] border-2 border-dashed flex items-center justify-center">
+                                <div className="basis-[30%] flex items-center justify-center">
                                     {(value === "1" || value === "2" || value === "3" || value === "4" || value === "5") && (
                                         <Popover>
                                             <PopoverTrigger asChild>

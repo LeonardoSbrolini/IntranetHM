@@ -98,6 +98,19 @@ export default function LefBar() {
                             Painéis
                         </Link>
 
+                        <Accordion type="single" collapsible >
+                            <AccordionItem value="item-1" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                >
+                                    Is it accessible?
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    Yes. It adheres to the WAI-ARIA design pattern.
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+
                         <Link
                             href="/pages/sustentabilidade"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"

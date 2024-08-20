@@ -6,7 +6,7 @@ interface ContainerProps {
 
 export default function Container ({children}:ContainerProps) {
     return(
-        <div className="h-screen p-4 lg:p-6">
+        <div className="h-screen p-6">
             {children}
         </div>
     )
