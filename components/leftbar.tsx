@@ -1,6 +1,6 @@
 import { Tooltip, TooltipContent, TooltipTrigger, } from "@/components/ui/tooltip"
 import Link from "next/link";
-import { Bell, BookMarked, Cake, CreditCard, ExternalLink, Headset, Home, LineChart, Monitor, Newspaper, Package, Package2, Phone, Recycle, Settings, ShoppingCart, Star, TriangleAlert, Users, Users2 } from "lucide-react";
+import { Bell, BookMarked, Cake, CornerDownRight, CreditCard, ExternalLink, Headset, Home, Monitor, Newspaper, Package2, Phone, Recycle, Star, TriangleAlert } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -25,118 +25,228 @@ export default function LefBar() {
                 </div>
                 <div className="flex-1">
                     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                        <Link
-                            href="/"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Home className="h-4 w-4" />
-                            Página Inicial
-                        </Link>
-
-                        <Link
-                            href="http://10.4.1.22/hmhelpdesk"
-                            target='_blank'
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Headset className="h-4 w-4" />
-                            Chamados T.I
-                        </Link>
-
-                        <Link
-                            href="/pages/noticias"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Newspaper className="h-4 w-4" />
-                            Notícias
-                        </Link>
-
-                        <Link
-                            href="/pages/atalhos"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <ExternalLink className="h-4 w-4" />
-                            Atalhos
-                        </Link>
-
-                        <Link
-                            href="/pages/manuais"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <BookMarked className="h-4 w-4" />
-                            Manuais
-                        </Link>
-
-                        <Link
-                            href="/pages/ramais"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Phone className="h-4 w-4" />
-                            Ramais
-                        </Link>
-
-                        <Link
-                            href="/pages/registroponto"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <CreditCard className="h-4 w-4" />
-                            Registro de Ponto
-                        </Link>
-
-                        <Link
-                            href="/pages/aniversariantes"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Cake className="h-4 w-4" />
-                            Aniversariantes
-                        </Link>
-
-                        <Link
-                            href="#"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Monitor className="h-4 w-4" />
-                            Painéis
-                        </Link>
-
                         <Accordion type="single" collapsible >
                             <AccordionItem value="item-1" className="w-full border-none">
                                 <AccordionTrigger
-                                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
                                 >
-                                    Is it accessible?
+                                    <Link
+                                        href="/"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Home className="h-4 w-4" />
+                                        Página Inicial
+                                    </Link>
                                 </AccordionTrigger>
-                                <AccordionContent>
-                                    Yes. It adheres to the WAI-ARIA design pattern.
+                            </AccordionItem>
+                            <AccordionItem value="item-2" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="http://10.4.1.22/hmhelpdesk"
+                                        target='_blank'
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Headset className="h-4 w-4" />
+                                        Chamados T.I
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-3" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/noticias"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Newspaper className="h-4 w-4" />
+                                        Notícias
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-4" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/atalhos"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <ExternalLink className="h-4 w-4" />
+                                        Atalhos
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-5" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/manuais"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <BookMarked className="h-4 w-4" />
+                                        Manuais
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-6" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/ramais"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Phone className="h-4 w-4" />
+                                        Ramais
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-7" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={true}
+                                >
+                                    <div
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CreditCard className="h-4 w-4" />
+                                        Registro de Ponto
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pb-0">
+                                    <Link
+                                        href="/pages/registroponto/criar"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Criar registro
+                                    </Link>
+                                    <Link
+                                        href="/pages/registroponto/meusregistros"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Meus registros
+                                    </Link>
+                                    <Link
+                                        href="/pages/registroponto/gestao"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Gestão
+                                    </Link>
                                 </AccordionContent>
                             </AccordionItem>
+                            <AccordionItem value="item-8" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/aniversariantes"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Cake className="h-4 w-4" />
+                                        Aniversariantes
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-9" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={true}
+                                >
+                                    <div
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Monitor className="h-4 w-4" />
+                                        Painéis
+                                    </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pb-0">
+                                    <Link
+                                        href="#"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Cartão Ponto
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Centro Cirúrgico
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Enfermaria 1
+                                    </Link>
+                                    <Link
+                                        href="#"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Enfermaria 2
+                                    </Link>
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="item-10" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/sustentabilidade"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Recycle className="h-4 w-4" />
+                                        Sustentabilidade
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-11" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/reclamacoes"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <TriangleAlert className="h-4 w-4" />
+                                        Reclamações / Denúncias
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
+                            <AccordionItem value="item-12" className="w-full border-none">
+                                <AccordionTrigger
+                                    className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                                    showIcon={false}
+                                >
+                                    <Link
+                                        href="/pages/ideiapremiada"
+                                        className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <Star className="h-4 w-4" />
+                                        Idéia premiada
+                                    </Link>
+                                </AccordionTrigger>
+                            </AccordionItem>
                         </Accordion>
-
-                        <Link
-                            href="/pages/sustentabilidade"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Recycle className="h-4 w-4" />
-                            Sustentabilidade
-                        </Link>
-
-                        <Link
-                            href="/pages/reclamacoes"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <TriangleAlert className="h-4 w-4" />
-                            Reclamações / Denúncias
-                        </Link>
-
-                        <Link
-                            href="/pages/ideiapremiada"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                        >
-                            <Star className="h-4 w-4" />
-                            Idéia premiada
-                            {/* <Badge className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded-full">
-                                1
-                            </Badge> */}
-                        </Link>
                     </nav>
                 </div>
             </div>

@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
-import { AniversariantesData } from "@/data/AniversariantesData"; // Importando os dados dos aniversariantes
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Months } from "@/data/monthData";
 import { Calendar } from "../ui/calendar";
+import { useEffect, useState } from "react";
 
 // Definindo o tipo para os dados dos aniversariantes
 export type Aniversariante = {
@@ -20,13 +20,10 @@ export type Aniversariante = {
     dataNascimento: string;
 };
 
-// Dados dos aniversariantes
-const data = AniversariantesData;
-
 // Colunas da tabela para os dados dos aniversariantes
 export const columns: ColumnDef<Aniversariante>[] = [
     {
-        accessorKey: "nome",
+        accessorKey: "usuario_nome",
         header: ({ column }) => {
             return (
                 <Button
@@ -38,25 +35,41 @@ export const columns: ColumnDef<Aniversariante>[] = [
                 </Button>
             )
         },
-        cell: ({ row }) => <div>{row.getValue("nome")}</div>,
+        cell: ({ row }) => <div>{row.getValue("usuario_nome")}</div>,
     },
     {
-        accessorKey: "dataNascimento",
+        id: "usuario_aniversario",
         header: ({ column }) => {
             return (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Data de Nascimento
+                    Aniversário
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             )
         },
-        cell: ({ row }) => {
-            const date = new Date(row.getValue("dataNascimento"));
-            return <div>{date.toLocaleDateString()}</div>;
+        cell: ({ row }) => <div>{row.getValue("usuario_aniversario")}</div>,
+    },
+    {
+        accessorKey: "setor_nome",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Setor
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
         },
+        // cell: ({ row }) => {
+        //     const date = new Date(row.getValue("dataNascimento"));
+        //     return <div>{date.toLocaleDateString()}</div>;
+        // },
+        cell: ({ row }) => <div>{row.getValue("setor_nome")}</div>,
     },
     {
         id: "actions",
@@ -90,24 +103,30 @@ export const columns: ColumnDef<Aniversariante>[] = [
 
 // Função de filtro para buscar por nome ou data de nascimento
 function CustomFilter(row: any, columnId: any, value: any) {
-    const nome = row.getValue('nome')?.toLowerCase() || '';
-    const dataNascimento = row.getValue('dataNascimento')?.toLowerCase() || '';
+    const nome = row.getValue('usuario_nome')?.toLowerCase() || '';
+    const setor = row.getValue('setor_nome')?.toLowerCase() || '';
     const searchTerm = value.toLowerCase();
 
-    return nome.includes(searchTerm) || dataNascimento.includes(searchTerm);
+    return nome.includes(searchTerm) || setor.includes(searchTerm);
 }
 
 export function AniversariantesTable() {
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         []
     );
     const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = React.useState({});
-    const [globalFilter, setGlobalFilter] = React.useState("");
+        useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState({});
+    const [globalFilter, setGlobalFilter] = useState("");
+    const [aniversariantes, setAniversariantes] = useState<Aniversariante[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const [month, setMonth] = React.useState<number>(8)
+    const [month, setMonth] = useState<number>(8)
+
+    // Dados dos aniversariantes
+    const data = aniversariantes;
 
     const table = useReactTable({
         data,
@@ -130,11 +149,30 @@ export function AniversariantesTable() {
         onRowSelectionChange: setRowSelection,
     });
 
+    useEffect(() => {
+        const fetchAniversariantes = async () => {
+            try {
+                const response = await fetch('/api/usuarios/aniversariantes');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar as notícias');
+                }
+                const data = await response.json();
+                setAniversariantes(data);
+            } catch (error) {
+                setError((error as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAniversariantes();
+    }, []);
+
     return (
         <div>
             <div className="flex items-center gap-x-4 py-4">
                 <Input
-                    placeholder="Filtrar aniversariantes..."
+                    placeholder="Filtrar aniversariantes / setor..."
                     value={globalFilter ?? ""}
                     onChange={(event) => setGlobalFilter(String(event.target.value))}
                     className="max-w-sm"

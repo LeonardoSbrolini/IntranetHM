@@ -1,15 +1,41 @@
+"use client"
 import BlogCard from "@/components/blogCard";
 import Breadcrumb from "@/components/breadcrumb";
 import Container from "@/components/container";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { blogData } from "@/data/blogData";
+import type { Noticia } from "@/types/noticia";
+import { useEffect, useState } from "react";
 
 export default function BlogPage() {
+    const [noticias, setNoticias] = useState<Noticia[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
     // Ordena por número de visualizações (do maior para o menor)
     const popularPosts = [...blogData].sort((a, b) => b.view - a.view).slice(0, 1);
 
     // Ordena por data de publicação (do mais recente para o mais antigo)
     const recentPosts = [...blogData].sort((a, b) => new Date(b.published).getTime() - new Date(a.published).getTime()).slice(0, 5);
+    
+    useEffect(() => {
+        const fetchNoticias = async () => {
+            try {
+                const response = await fetch('/api/noticias');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar as notícias');
+                }
+                const data = await response.json();
+                setNoticias(data);
+            } catch (error) {
+                setError((error as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchNoticias();
+    }, []);
 
     return (
         <Container>
@@ -21,8 +47,8 @@ export default function BlogPage() {
                         Publicações
                     </div>
                     <div className="grid gap-y-8 justify-between grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 justify-items-center mb-6">
-                        {blogData.map(post => (
-                            <BlogCard key={post.id} title={post.title} autor={post.author} published={post.published} view={post.view} post={post.post} isNew={post.isNew} img={post.img} id={post.id} variant={'medium'} />
+                        {noticias.map(post => (
+                            <BlogCard key={post.aviso_id} title={post.aviso_titulo} autor={post.aviso_usuario_id.toString()} published={post.aviso_dataPublic} view={100} post={post.aviso_descricao} isNew={false} img={''} id={post.aviso_id} variant={'medium'} />
                         ))}
                     </div>
                     <Pagination>

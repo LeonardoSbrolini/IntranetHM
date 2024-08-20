@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
@@ -9,6 +8,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { RamaisData } from "@/data/ramaisData";
+import { useEffect, useState } from "react";
 
 // Definindo o tipo para os dados dos ramais
 export type Ramal = {
@@ -17,9 +17,6 @@ export type Ramal = {
     sala: string | null;
     responsavel: string | null;
 };
-
-// Dados dos ramais
-const data = RamaisData
 
 // Colunas da tabela para os dados dos ramais
 export const columns: ColumnDef<Ramal>[] = [
@@ -133,6 +130,11 @@ export function RamaisTable() {
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
     const [globalFilter, setGlobalFilter] = React.useState("");
+    const [ramais, setRamais] = useState<Ramal[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const data = ramais
 
     const table = useReactTable({
         data,
@@ -154,6 +156,25 @@ export function RamaisTable() {
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
     });
+
+    useEffect(() => {
+        const fetchRamais = async () => {
+            try {
+                const response = await fetch('/api/ramais');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar as notícias');
+                }
+                const data = await response.json();
+                setRamais(data);
+            } catch (error) {
+                setError((error as Error).message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRamais();
+    }, []);
 
     return (
         <div>
