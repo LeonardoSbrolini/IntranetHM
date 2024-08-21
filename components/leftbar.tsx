@@ -235,16 +235,38 @@ export default function LefBar() {
                             <AccordionItem value="item-12" className="w-full border-none">
                                 <AccordionTrigger
                                     className="hover:no-underline w-full rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                                    showIcon={false}
+                                    showIcon={true}
                                 >
-                                    <Link
-                                        href="/pages/ideiapremiada"
+                                    <div
                                         className="flex items-center gap-3 rounded-lg text-muted-foreground transition-all hover:text-primary"
                                     >
                                         <Star className="h-4 w-4" />
                                         Idéia premiada
-                                    </Link>
+                                    </div>
                                 </AccordionTrigger>
+                                <AccordionContent className="pb-0">
+                                    <Link
+                                        href="/pages/ideiapremiada/criar"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Criar ideia premiada
+                                    </Link>
+                                    <Link
+                                        href="/pages/ideiapremiada/minhasideias"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Minhas ideias
+                                    </Link>
+                                    <Link
+                                        href="/pages/ideiapremiada/gestao"
+                                        className="flex items-center gap-3 px-6 py-2 rounded-lg text-muted-foreground transition-all hover:text-primary"
+                                    >
+                                        <CornerDownRight className="h-4 w-4" />
+                                        Gestão de ideias
+                                    </Link>
+                                </AccordionContent>
                             </AccordionItem>
                         </Accordion>
                     </nav>

@@ -15,15 +15,17 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
       LOWER(usuarios.usuario_nome) AS usuario_nome, 
       DAY(usuarios.usuario_dtNasc) AS usuario_dia, 
       MONTH(usuarios.usuario_dtNasc) AS usuario_mes, 
-      FORMAT(usuarios.usuario_dtNasc, 'dd/MM') AS usuario_aniversario,
+      FORMAT(usuarios.usuario_dtNasc, 'dd/MM') AS usuario_aniversario, 
       usuarios.usuario_setor_id, 
-      setores.setor_nome 
+      LOWER(setores.setor_nome) AS setor_nome
       FROM 
-            usuarios
+          usuarios 
       JOIN 
-            setores 
+          setores 
       ON 
-            usuarios.usuario_setor_id = setores.setor_id;
+          usuarios.usuario_setor_id = setores.setor_id 
+	    ORDER BY 
+          usuario_dia, usuario_mes
       `;
 
       if (result.recordset.length > 0) {
