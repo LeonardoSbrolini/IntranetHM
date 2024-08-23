@@ -11,19 +11,23 @@ const handler = NextAuth({
 				password: { label: "Password", type: "password" }
 			},
 			async authorize(credentials, req) {
-				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+				console.log('CREDENTIALS', credentials)
+				console.log('CREDENTIALS USERNAME: ', credentials?.username)
+				console.log('CREDENTIALS PASSWORD: ', credentials?.password)
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/usuarios/login`, {
 					method: 'POST',
 					headers: {
 						'Content-type': 'application/json'
 					},
 					body: JSON.stringify({
+						teste: 'teste',
 						username: credentials?.username,
 						password: credentials?.password
 					})
 				});
 
 				const user: User = await response.json();
-
+				
 				if (!user || !response.ok) {
 					return null;
 				}
@@ -46,9 +50,14 @@ const handler = NextAuth({
 		async session({ session, token }) {
 			if (token?.user) {
 				session.user = token.user as User
+				console.log('session', session)
 			}
 			return session;
 		},
+	},
+	jwt: {
+		// Define a expiração do token JWT em segundos (1 hora, por exemplo)
+		maxAge: 60 * 60, // 1 hora
 	},
 	secret: process.env.NEXTAUTH_SECRET,
 });

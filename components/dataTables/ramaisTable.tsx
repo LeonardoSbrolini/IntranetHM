@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, } from "@tanstack/react-table";
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type PaginationState, } from "@tanstack/react-table";
 import { ArrowUpDown, ChevronsUpDown, MoreHorizontal, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -9,9 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { RamaisData } from "@/data/ramaisData";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination";
 
 // Definindo o tipo para os dados dos ramais
 export type Ramal = {
@@ -37,7 +38,6 @@ export const columns: ColumnDef<Ramal>[] = [
             )
         },
         cell: ({ row }) => <div>{row.getValue("ramal")}</div>,
-
     },
     {
         accessorKey: "setor",
@@ -100,10 +100,7 @@ export const columns: ColumnDef<Ramal>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                        <DropdownMenuItem
-
-                            onClick={() => navigator.clipboard.writeText(ClipboardRamalText)}
-                        >
+                        <DropdownMenuItem onClick={() => navigator.clipboard.writeText(ClipboardRamalText)}>
                             Copiar Ramal
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -137,6 +134,35 @@ export function RamaisTable() {
     const [ramais, setRamais] = useState<Ramal[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [pagination, setPagination] = React.useState<PaginationState>({
+        pageIndex: 0,
+        pageSize: 10,
+    })
+
+    const searchParams = useSearchParams();
+    const router = useRouter()
+
+    const page = searchParams.get('page') || '1'
+
+    const handleNextPage = (pageIndex: any) => {
+        const params = new URLSearchParams(searchParams)
+
+        params.set('page', (Number(pageIndex) + 1).toString())
+        router.push(`/pages/ramais?${params.toString()}`)
+        table.setPageIndex(Number(pageIndex) + 1)
+    }
+
+    const handlePreviousPage = (pageIndex: any) => {
+        if(pageIndex <= 0){ 
+            return
+        }
+        const params = new URLSearchParams(searchParams)
+
+        params.set('page', (Number(pageIndex) - 1).toString())
+        router.push(`/pages/ramais?${params.toString()}`)
+        table.setPageIndex(Number(pageIndex) - 1)
+    }
+
 
     const data = ramais;
 
@@ -147,14 +173,18 @@ export function RamaisTable() {
         onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
+        onPaginationChange: setPagination,
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+
+        // pageCount: number, -- Define quantidade de paginas
         state: {
             sorting,
             columnFilters,
             columnVisibility,
             rowSelection,
             globalFilter,
+            pagination,
         },
         globalFilterFn: CustomFilter, // Função de filtro personalizada
         onColumnVisibilityChange: setColumnVisibility,
@@ -238,7 +268,6 @@ export function RamaisTable() {
                         </Command>
                     </PopoverContent>
                 </Popover>
-
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
@@ -330,23 +359,31 @@ export function RamaisTable() {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredRowModel().rows.length} resultado(s)
-                </div>
-                <Button
-                    variant="outline"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Anterior
-                </Button>
-                <Button
-                    variant="outline"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Próximo
-                </Button>
+                {pagination.pageIndex}
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious onClick={() => handlePreviousPage(Number(page).toString())}/>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink href="#">1</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink href="#">
+                                2
+                            </PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink href="#">3</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationNext onClick={() => handleNextPage(Number(page).toString())} />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
         </div>
     );
