@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type PaginationState, } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronsUpDown, MoreHorizontal, Check } from "lucide-react";
+import { ArrowUpDown, ChevronsUpDown, MoreHorizontal, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
@@ -134,40 +134,60 @@ export function RamaisTable() {
     const [ramais, setRamais] = useState<Ramal[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page') || '1'
+
     const [pagination, setPagination] = React.useState<PaginationState>({
         pageIndex: 0,
         pageSize: 10,
     })
 
-    const searchParams = useSearchParams();
     const router = useRouter()
 
-    const page = searchParams.get('page') || '1'
-
     const handleNextPage = (pageIndex: any) => {
+        if (pagination.pageIndex >= table.getPageCount() - 1) {
+            return
+        }
         const params = new URLSearchParams(searchParams)
 
         params.set('page', (Number(pageIndex) + 1).toString())
         router.push(`/pages/ramais?${params.toString()}`)
-        table.setPageIndex(Number(pageIndex) + 1)
+        console.log(pageIndex)
+        console.log(`/pages/ramais?${params.toString()}`)
+        console.log(pagination.pageIndex)
+        table.setPageIndex(pagination.pageIndex + 1)
     }
 
     const handlePreviousPage = (pageIndex: any) => {
-        if(pageIndex <= 0){ 
+        if (pageIndex <= 1) {
             return
         }
         const params = new URLSearchParams(searchParams)
 
         params.set('page', (Number(pageIndex) - 1).toString())
         router.push(`/pages/ramais?${params.toString()}`)
-        table.setPageIndex(Number(pageIndex) - 1)
+        console.log(pageIndex)
+        console.log(`/pages/ramais?${params.toString()}`)
+        console.log(pagination.pageIndex)
+        table.setPageIndex(pagination.pageIndex - 1)
     }
 
+    const handleGoToPage = (page: any) => {
+        const params = new URLSearchParams(searchParams)
+        params.set('page', (Number(page)).toString())
+        router.push(`/pages/ramais?${params.toString()}`)
+
+        table.setPageIndex(page - 1)
+    }
 
     const data = ramais;
 
     const table = useReactTable({
         data,
+        initialState: {
+            pagination: { pageIndex: Number(page) - 1 }
+        },
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -176,8 +196,6 @@ export function RamaisTable() {
         onPaginationChange: setPagination,
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-
-        // pageCount: number, -- Define quantidade de paginas
         state: {
             sorting,
             columnFilters,
@@ -210,6 +228,15 @@ export function RamaisTable() {
         fetchRamais();
     }, []);
 
+    useEffect(() => {
+        if (pagination.pageIndex > table.getPageCount()) {
+            const params = new URLSearchParams(searchParams)
+            params.set('page', ('1'))
+            router.push(`/pages/ramais?${params.toString()}`)
+            setPagination((prev) => ({ ...prev, pageIndex: 0 }))
+        }
+    }, [pagination.pageIndex])
+
     // Função para aplicar filtros
     const applyFilters = (row: any) => {
         const globalMatch = !globalFilter || CustomFilter(row, 'global', globalFilter);
@@ -229,7 +256,7 @@ export function RamaisTable() {
                     className="max-w-sm"
                 />
 
-                <Popover>
+                {/* <Popover>
                     <PopoverTrigger asChild>
                         <Button
                             variant="outline"
@@ -306,7 +333,7 @@ export function RamaisTable() {
                             </CommandList>
                         </Command>
                     </PopoverContent>
-                </Popover>
+                </Popover> */}
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -359,32 +386,119 @@ export function RamaisTable() {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                {pagination.pageIndex}
                 <Pagination>
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious onClick={() => handlePreviousPage(Number(page).toString())}/>
+                            <Button
+                                size={'sm'}
+                                variant={'ghost'}
+                                onClick={() => handleGoToPage(1)}
+                                className="flex items-center"
+                                disabled={Number(page) <= 1}
+                            >
+                                <ChevronLeft className="size-4" />
+                                Primeira Página
+                            </Button>
                         </PaginationItem>
                         <PaginationItem>
-                            <PaginationLink href="#">1</PaginationLink>
+                            <Button
+                                size={'sm'}
+                                variant={'ghost'}
+                                onClick={() => handlePreviousPage(Number(page).toString())}
+                                className="flex items-center"
+                                disabled={Number(page) <= 1}
+                            >
+                                <ChevronLeft className="size-4" />
+                                Anterior
+                            </Button>
+                        </PaginationItem>
+
+                        {Number(page) >= 3 &&
+                            <PaginationItem>
+                                <PaginationLink
+                                    onClick={() => handleGoToPage(1)}
+                                    className=" cursor-pointer"
+                                >
+                                    1
+                                </PaginationLink>
+                            </PaginationItem>
+                        }
+                        {Number(page) >= 4 &&
+                            < PaginationItem >
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                        }
+                        {Number(page) > 1 &&
+                            <PaginationItem>
+                                <PaginationLink
+                                    onClick={() => handleGoToPage(Number(page) - 1)}
+                                    className=" cursor-pointer"
+                                >
+                                    {Number(page) - 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        }
+                        <PaginationItem>
+                            <Button
+                                variant={'ghost'}
+                                size={'sm'}
+                                disabled={true}
+                            >
+                                {page}
+                            </Button>
+                        </PaginationItem>
+                        {Number(page) < table.getPageCount() - 1 &&
+                            <PaginationItem>
+                                <PaginationLink
+                                    onClick={() => handleGoToPage(Number(page) + 1)}
+                                    className=" cursor-pointer"
+                                >
+                                    {Number(page) + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        }
+                        {Number(page) <= table.getPageCount() - 3 &&
+                            < PaginationItem >
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                        }
+                        {Number(page) < table.getPageCount() &&
+                            <PaginationItem>
+                                <PaginationLink
+                                    onClick={() => handleGoToPage(table.getPageCount())}
+                                    className=" cursor-pointer"
+                                >
+                                    {table.getPageCount()}
+                                </PaginationLink>
+                            </PaginationItem>
+                        }
+                        <PaginationItem>
+                            <Button
+                                size={'sm'}
+                                variant={'ghost'}
+                                onClick={() => handleNextPage(Number(page).toString())}
+                                className="flex items-center"
+                                disabled={pagination.pageIndex >= table.getPageCount() - 1}
+                            >
+                                Próxima
+                                <ChevronRight className="size-4" />
+                            </Button>
                         </PaginationItem>
                         <PaginationItem>
-                            <PaginationLink href="#">
-                                2
-                            </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#">3</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext onClick={() => handleNextPage(Number(page).toString())} />
+                            <Button
+                                size={'sm'}
+                                variant={'ghost'}
+                                onClick={() => handleGoToPage(table.getPageCount())}
+                                className="flex items-center"
+                                disabled={pagination.pageIndex >= table.getPageCount() - 1}
+                            >
+                                Última Página
+                                <ChevronRight className="size-4" />
+                            </Button>
                         </PaginationItem>
                     </PaginationContent>
                 </Pagination>
             </div>
-        </div>
+        </div >
     );
 }
